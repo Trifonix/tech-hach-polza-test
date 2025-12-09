@@ -1,0 +1,115 @@
+{
+  "name": "polza-test-workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4837d276-e74f-495a-b690-9cb8a27b719a",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:/tech-hach-polza-test/result.txt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "49c76277-4573-44e3-85d2-c9d6a8530492",
+      "name": "Read/Write Files from Disk",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "chatId": "6438478253",
+        "text": "={{ $json.dataNew }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "73e815da-df57-42dc-85a4-302103141bf1",
+      "name": "Send a text message",
+      "webhookId": "a4b0a627-4bc7-44d2-a318-8ac2be8b2616",
+      "credentials": {
+        "telegramApi": {
+          "id": "PMmCHr1VoHFJLIzB",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "destinationKey": "dataNew",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "7ae14c8f-bf1c-496c-aca9-be63ca9ac936",
+      "name": "Extract from File"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2eb80f50-f4b9-4ab0-9b5b-0f91065e621f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4b41bedac16dd98440d37f03e14cbe93e80851992cec798878b908a7dd4a5dcf"
+  },
+  "id": "gDoHLHNBlgUPaDot",
+  "tags": []
+}
