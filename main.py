@@ -30,8 +30,11 @@ def main():
         print("Создайте файл emails.txt с email-адресами (по одному на строку).")
         sys.exit(1)
     
-    print("Email\t\t\tСтатус")
-    print("-" * 40)
+    print("#" * 40)
+    print("Записываем результаты в файл ./result.txt")
+
+    with open('result.txt', 'a', encoding='utf-8') as f:
+        f.write(f"{"-" * 40}\n")
     
     for email in emails:
         domain = extract_domain(email)
@@ -40,7 +43,16 @@ def main():
         else:
             status = check_domain_mx_records(domain)
         
-        print(f"{email.strip():20}\t{status}")
+        # print(f"k{email.strip():20}\t{status}")
+
+        with open('result.txt', 'a', encoding='utf-8') as f:
+            f.write(f"k{email.strip():20}\t\t\t\t{status}\n")
+    
+    with open('result.txt', 'a', encoding='utf-8') as f:
+        f.write(f"{"-" * 40}\n")
+
+    print("Закрываем ./result.txt")
+    print("#" * 40)
 
 if __name__ == "__main__":
     main()
