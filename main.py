@@ -1,7 +1,3 @@
-"""
-Проверка MX-записей доменов email-адресов.
-"""
-
 import re
 import sys
 from dns import resolver, exception
@@ -42,8 +38,6 @@ def main():
             status = "неверный формат email"
         else:
             status = check_domain_mx_records(domain)
-        
-        # print(f"k{email.strip():20}\t{status}")
 
         with open('result.txt', 'a', encoding='utf-8') as f:
             f.write(f"k{email.strip():20}\t\t\t\t{status}\n")
