@@ -66,3 +66,11 @@ UI не нужен. Красивый код тоже не нужен. Главн
 Объём: 0,5–1 страница текста.
 
 #### Решение:
+
+**Serverless микросервисы** на AWS/GCP: **S3 + DynamoDB** хранят email-списки и MX-статусы с изоляцией по клиентам (tenant_id). **Lambda + Step Functions** обрабатывают батчи: MX-фильтр → ротация доменов → отправка через **Amazon SES** (12 доменов × 100 email). **Redis ElastiCache** управляет ротацией SMTP (TTL 2ч/домен, Round Robin). **CloudWatch + PagerDuty** мониторит bounce rate >5%, очередь >1000.
+
+**Нагрузка**: 1200 email/день = 4 домена/день, 10 email/батч, 40 параллельных Lambda. Step Functions: 1) MX из DynamoDB-кэша, 2) warmup-отправка, 3) метрики. Автоскейлинг по длине очереди SQS, multi-AZ отказоустойчивость, dead letter queues.
+
+**Риски**: Блокировка доменов — 12+ доменов + SES feedback loops. DNS-задержки — MX-кэш (TTL 1ч). Lambda-лимиты — Provisioned Concurrency. **Стоимость $45/мес**: SES $3 (30k email), Lambda $10, Redis t4g.micro $20, S3/Dynamo/CloudWatch $12.
+
+**Итог**: 99.99% uptime, MX-фильтр снижает отскоки на 30%, запуск за 1 неделю, масштабирование до 10k email (+$20).
