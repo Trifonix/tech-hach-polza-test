@@ -1,0 +1,5 @@
+test@gmail.com
+user@nonexistent12345xyz.ru
+valid@outlook.com
+test@werner.example
+test@localhost
